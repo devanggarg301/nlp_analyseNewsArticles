@@ -115,3 +115,6 @@ input:focus,textarea:focus{outline:2px solid #93b17a}.chat-input{border-color:#c
 .stat>strong{color:#50665d}.stat-top{color:#75857b}.stat>small{color:#87958b}
 .tabs button.active{color:#5d8072;border-color:#6e9383}.source-card h3,.workspace-title h2,.section-title h2{color:#4d6258}
 .source-label{color:#6d8175}.citation{color:#658372}.ask-card h3{color:#627f6d}
+.stat-link{display:block;width:100%;text-align:left;font:inherit;cursor:pointer}
+.stat-link:focus-visible{outline:2px solid #638a79;outline-offset:3px}
+.claim-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
