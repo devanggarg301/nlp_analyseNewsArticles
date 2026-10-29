@@ -1,0 +1,73 @@
+{
+  "dataset": "BABE SG2 expert sentence labels",
+  "seed": 42,
+  "split": "Source-document and near-duplicate group split; event identifiers unavailable",
+  "counts": {
+    "train": 2553,
+    "validation": 534,
+    "test": 580
+  },
+  "models": [
+    {
+      "name": "TF-IDF + Logistic Regression",
+      "validation_macro_f1": 0.728417751931731,
+      "test_macro_f1": 0.7253517980790709,
+      "test_precision": 0.7275531596286313,
+      "test_recall": 0.7258620689655173,
+      "confusion_matrix": [
+        [
+          198,
+          92
+        ],
+        [
+          67,
+          223
+        ]
+      ]
+    },
+    {
+      "name": "TF-IDF + Linear SVM",
+      "validation_macro_f1": 0.7096553538542489,
+      "test_macro_f1": 0.6970429602036827,
+      "test_precision": 0.7015568529329997,
+      "test_recall": 0.6982758620689655,
+      "confusion_matrix": [
+        [
+          184,
+          106
+        ],
+        [
+          69,
+          221
+        ]
+      ]
+    },
+    {
+      "name": "Fine-tuned RoBERTa-base",
+      "validation_macro_f1": 0.8107811321416669,
+      "test_macro_f1": 0.8429685431300968,
+      "test_precision": 0.8442865494982759,
+      "test_recall": 0.843103448275862,
+      "confusion_matrix": [
+        [
+          253,
+          37
+        ],
+        [
+          54,
+          236
+        ]
+      ]
+    }
+  ],
+  "selected": "Fine-tuned RoBERTa-base",
+  "transformer_status": "Fine-tuned for 1 epochs; best validation checkpoint selected",
+  "training_parameters": {
+    "roberta_epochs": 1,
+    "max_length": 128,
+    "batch_size": 4,
+    "gradient_accumulation_steps": 4,
+    "learning_rate": 2e-05,
+    "near_duplicate_cosine": 0.92
+  }
+}
