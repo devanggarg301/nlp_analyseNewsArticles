@@ -78,7 +78,7 @@ def question_intent(question):
     text=re.sub(r"[^a-z\s]","",question.lower()).strip()
     if re.search(r"\b(?:places?|areas?|regions?|states?|districts?|cities|locations?)\b.*\b(?:affected|hit|impacted)\b|\bwhere\b.*\b(?:affected|hit|impact|landfall)\b",text):
         return "affected_places"
-    if re.search(r"\b(?:topic|main subject|main theme|summary|summarize|summarise|overview)\b",text) or re.search(r"\b(?:article|articles|story|news|discussion)\b.*\babout$",text):
+    if re.search(r"\b(?:topic|main subject|main theme|summary|summarize|summarise|overview|frame|framing)\b",text) or re.search(r"\b(?:article|articles|story|news|discussion|coverage)\b.*\babout$",text):
         return "overview"
     return "specific"
 

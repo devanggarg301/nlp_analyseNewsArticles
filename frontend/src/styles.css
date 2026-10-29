@@ -85,6 +85,7 @@ input:not([type=checkbox]):not([type=file]),textarea{border-color:#cacec9;border
 @media(prefers-reduced-motion:reduce){.card,.button{transition:none!important}.card:hover{transform:none!important}}
 
 /* Light sage workspace with muted teal controls. */
+.comparison-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
 :root,body{background:#f5f7f4;color:#40545a}
 .sidebar{background:#eef3ed;border-right:1px solid #d8e2d6;color:#5e7263}
 .brand{color:#456252}.brand span{color:#708979}.brand-mark{border-color:#c1d0c2;color:#62816e;background:#f9fbf7}
