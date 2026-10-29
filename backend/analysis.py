@@ -146,17 +146,20 @@ def merge_entities(entities, names, canonical):
 def align_claims(passages):
     if len(passages)<2:
         return []
+    from .quantities import numerical_pairs
+    numeric = numerical_pairs(passages,models.ner())
+    numeric_ids = {frozenset((r["left"],r["right"])) for r in numeric}
     sim, method = models.similarities([p["text"] for p in passages])
     candidates = []
     threshold = 0.58 if models.encoder() is not None else 0.23
     for i,p in enumerate(passages):
         for j in range(i+1,len(passages)):
             q = passages[j]
-            if p["article_id"] != q["article_id"] and sim[i,j]>=threshold:
+            if p["article_id"] != q["article_id"] and sim[i,j]>=threshold and frozenset((p["id"],q["id"])) not in numeric_ids:
                 candidates.append((float(sim[i,j]),p,q))
     candidates.sort(key=lambda x:x[0],reverse=True)
-    predictor = models.nli()
-    output = []
+    predictor = models.nli() if candidates else None
+    output = list(numeric)
     for score,p,q in candidates[:24]:
         label, reason = "unresolved", "Related passages; semantic similarity alone does not establish agreement."
         directional = None
@@ -297,7 +300,8 @@ def analyze(articles, progress, entity_merges=None):
     progress("Interpreting entity portrayal",75)
     if llm.configured():
         try:
-            enrich(entities,passages,loaded,articles)
+            if entities or any(row["label"]=="potentially_loaded" for row in loaded):
+                enrich(entities,passages,loaded,articles)
         except Exception as exc:
             warnings.append("Entity portrayal analysis could not complete: "+llm.error_summary(exc)+" Entity mentions remain available.")
     else:

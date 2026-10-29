@@ -1,5 +1,12 @@
 # Verification record
 
+## Numerical claim update
+- Full regression suite: 76 passing tests. Targeted checks cover the exact five-versus-three
+  example, numeric/word forms, compatible lower bounds, different times/locations,
+  approximate totals, subgroup counts and negated assertions.
+- Numeric candidates bypass sentence similarity filtering and do not depend on NLI.
+- The overview now separates language cues from potential claim conflicts.
+
 ## Document-count and API-status regression update
 - Regression suite expanded to **48 passing tests**; the production build passes.
 - Document/docs/file/article/source count questions use workspace metadata rather than

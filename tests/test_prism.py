@@ -372,4 +372,15 @@ def test_manual_entity_grouping_survives_reanalysis(client):
     after=run(client,ws["id"])
     assert names[1] not in [e["name"] for e in after["analysis"]["entities"]]
 
+def test_exact_death_count_disagreement_in_complete_analysis(client):
+    ws=client.post("/api/workspaces",json={"title":"Same-event death count test"}).json()
+    for publisher,text in [("Article A","Exactly five people had died by 6 p.m."),("Article B","Exactly three people had died by 6 p.m.")]:
+        result=client.post(f'/api/workspaces/{ws["id"]}/articles',json={"title":"Reported death toll","publisher":publisher,"text":text})
+        assert result.status_code==200
+    ws=run(client,ws["id"])
+    assert ws["analysis"]["counts"]["flagged"]==0
+    conflicts=[c for c in ws["analysis"]["claims"] if c["label"]=="potential_contradiction"]
+    assert len(conflicts)==1
+    assert conflicts[0]["method"]=="Numerical count and scope comparison"
+
 

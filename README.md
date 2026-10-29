@@ -205,3 +205,18 @@ it is not an overall truth or bias rating. Inspect the cited wording for each la
 Use Combine duplicate names only for aliases of the same entity (for example IMD
 and India Meteorological Department). This correction persists on reanalysis.
 Combining different people, organisations or places would make the comparison misleading.
+
+## Numerical claim checks
+Claim comparison now has a separate count-comparison pass for reported deaths and
+injuries. It supports digits and common number words, exact counts, lower/upper
+bounds and approximate counts. The check runs independently of embedding cutoffs
+and NLI, with exact source passage links. The dashboard separates language cues
+from potential claim conflicts.
+
+For the same event and scope, exactly five deaths versus exactly three deaths at
+the same stated time is flagged as a potential contradiction. At least three versus
+five is numerically compatible. Different stated times, places or populations are
+marked unresolved for review. This is not a universal numeric fact checker: complex
+multi-count sentences, implicit scope, time zones, all date formats, negation and
+attribution still require human review. Check publication dates and whether a later
+report updates an earlier count. Re-run saved comparisons to populate the new checks.
