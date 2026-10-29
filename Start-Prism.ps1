@@ -10,7 +10,7 @@ New-Item -ItemType Directory -Force -Path $prismRuntime | Out-Null
 $prismReady = $false
 try { $prismResponse = Invoke-RestMethod -Uri 'http://127.0.0.1:8000/api/health' -TimeoutSec 3; $prismReady = $prismResponse.status -eq 'ok' } catch {}
 if (!$prismReady) {
-    $prismProcess = Start-Process -FilePath $prismPython -ArgumentList @('-m','uvicorn','backend.app:app','--host','127.0.0.1','--port','8000') -WorkingDirectory $prismRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $prismRuntime 'server.log') -RedirectStandardError (Join-Path $prismRuntime 'server-error.log') -PassThru
+    $prismProcess = Start-Process -FilePath $prismPython -ArgumentList @('-m','uvicorn','backend.app:app','--host','0.0.0.0','--port','8000') -WorkingDirectory $prismRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $prismRuntime 'server.log') -RedirectStandardError (Join-Path $prismRuntime 'server-error.log') -PassThru
     Set-Content -LiteralPath (Join-Path $prismRuntime 'server.pid') -Value $prismProcess.Id
     for ($prismAttempt=0; $prismAttempt -lt 45; $prismAttempt++) {
         Start-Sleep -Seconds 1
