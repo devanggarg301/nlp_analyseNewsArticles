@@ -6,6 +6,7 @@ import ssl
 from urllib.parse import urlsplit, urljoin
 from bs4 import BeautifulSoup
 import trafilatura
+from .article_dates import publication_from_html
 
 MAX_BYTES = 2_000_000
 
@@ -81,6 +82,6 @@ def extract_url(url):
                     return element["content"]
             return None
         title = meta("og:title", "twitter:title") or (soup.title.get_text() if soup.title else "Untitled article")
-        return {"title":title.strip(), "publisher":meta("og:site_name") or urlsplit(current).hostname, "published_at":meta("article:published_time","datePublished","date"), "url":current, "text":text, "source_type":"url", "warnings":["Review extracted text before adding it."] + (["Article exceeds 3,000 words. Shorten it in the preview."] if len(text.split())>3000 else [])}
+        return {"title":title.strip(), "publisher":meta("og:site_name") or urlsplit(current).hostname, "published_at":publication_from_html(soup), "url":current, "text":text, "source_type":"url", "warnings":["Review extracted text and publication date before adding it."] + (["Article exceeds 3,000 words. Shorten it in the preview."] if len(text.split())>3000 else [])}
     raise ValueError("Too many redirects. Paste the article text instead.")
 

@@ -206,6 +206,15 @@ Use Combine duplicate names only for aliases of the same entity (for example IMD
 and India Meteorological Department). This correction persists on reanalysis.
 Combining different people, organisations or places would make the comparison misleading.
 
+## Publication dates
+Live URLs detect publication dates from metadata, Article JSON-LD and explicitly
+labelled publication times. PDF, DOCX, TXT and pasted text can recover dates from
+an explicit Published label near the article header. Review the detected date in
+the input preview, or use Edit article > Publication date to enter a known date.
+Existing saved articles can display a recovered date without rerunning analysis.
+Missing dates remain unavailable: update timestamps, file creation times and dates
+of events in the article are not substituted for publication dates.
+
 ## Numerical claim checks
 Claim comparison now has a separate count-comparison pass for reported deaths and
 injuries. It supports digits and common number words, exact counts, lower/upper

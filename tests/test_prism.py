@@ -93,6 +93,28 @@ def test_reanalysis_required_after_edit(client):
     assert result["analysis"] is None
     assert not result["chat"]
 
+
+def test_saved_missing_date_recovers_without_changing_analysis(client):
+    ws = store.create("Date metadata example")
+    ws["articles"] = [{"id":"dated-source", "title":"Cyclone report", "publisher":"Example",
+        "text":"Published OnOct 28, 2026 08:00 IST The authorities evacuated residents.",
+        "published_at":None, "source_type":"paste", "url":None}]
+    ws["analysis"] = {"warnings":[], "passages":[]}
+    ws["chat"] = [{"question":"What happened?"}]
+    store.save(ws)
+    result = client.get('/api/workspaces/'+ws["id"]).json()
+    assert result["articles"][0]["published_at"] == "2026-10-28"
+    assert result["analysis"] == ws["analysis"]
+    assert result["chat"] == ws["chat"]
+    assert store.get(ws["id"])["articles"][0]["published_at"] is None
+
+
+def test_text_upload_previews_publication_date(client):
+    response = client.post('/api/preview-upload', files={"file":("news.txt",
+        b"Published: October 28, 2026\nResidents were evacuated before the storm.","text/plain")})
+    assert response.status_code == 200
+    assert response.json()["articles"][0]["published_at"] == "2026-10-28"
+
 @pytest.mark.parametrize("url",["http://127.0.0.1/a","http://[::1]/","http://169.254.169.254/","http://10.0.0.1/","http://192.168.1.1/","http://user:password@example.com","file:///etc/passwd","https://example.com:8443/"])
 def test_ssrf_rejected(url):
     with pytest.raises(ValueError):

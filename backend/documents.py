@@ -2,6 +2,7 @@
 import io
 import zipfile
 from pathlib import Path
+from .article_dates import publication_from_text
 
 MAX_UPLOAD=10_000_000
 
@@ -54,5 +55,8 @@ def extract_document(name,data):
         raise ValueError("The document does not contain enough article text.")
     if len(text.split())>3000:
         warnings.append("This document exceeds 3,000 words. Shorten the editable preview before adding it.")
-    return {"title":title[:300],"publisher":"","text":text,"source_type":"upload","url":None,"published_at":None,"warnings":warnings}
+    published_at = publication_from_text(text)
+    if published_at:
+        warnings.append("Publication date detected from a Published label. Confirm it in the preview.")
+    return {"title":title[:300],"publisher":"","text":text,"source_type":"upload","url":None,"published_at":published_at,"warnings":warnings}
 

@@ -15,6 +15,7 @@ from .analysis import analyze, duplicate, event_warnings, merge_entities
 from .config import ROOT
 from .demo import DEMO
 from .fetcher import extract_url
+from .article_dates import publication_from_text
 from .schemas import WorkspaceInput, ArticleInput, URLInput, AnalyzeInput, ChatInput, MergeInput
 
 EXECUTOR = ThreadPoolExecutor(max_workers=2)
@@ -33,6 +34,11 @@ def workspace(wid):
     ws = store.get(wid)
     if not ws:
         raise HTTPException(404,"Workspace not found.")
+    # Fill missing metadata in the response without changing source text,
+    # saved analysis, or chat. Explicitly supplied dates always take precedence.
+    for article in ws["articles"]:
+        if not article.get("published_at"):
+            article["published_at"] = publication_from_text(article["text"])
     return ws
 
 def editable(wid):
@@ -115,6 +121,9 @@ async def preview_upload(file:UploadFile = File(...)):
         drafts = [{"title":(file.filename or "Article").rsplit(".",1)[0],"publisher":"Uploaded article","text":text,"source_type":"upload"}]
     else:
         raise HTTPException(422,"Supported formats are PDF, Word (.docx), TXT and CSV.")
+    for draft in drafts:
+        if not draft.get("published_at"):
+            draft["published_at"] = publication_from_text(draft["text"])
     return {"articles":drafts}
 
 @app.post("/api/workspaces/{wid}/articles")

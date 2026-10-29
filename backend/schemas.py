@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Literal
+from .article_dates import publication_from_text
 
 class WorkspaceInput(BaseModel):
     title: str = Field(min_length=3,max_length=160)
@@ -11,6 +12,11 @@ class ArticleInput(BaseModel):
     url: str | None = Field(default=None,max_length=2000)
     published_at: str | None = Field(default=None,max_length=100)
     source_type: Literal["paste","url","upload","demo"] = "paste"
+    @model_validator(mode="after")
+    def infer_publication_date(self):
+        if not self.published_at:
+            self.published_at = publication_from_text(self.text)
+        return self
     @field_validator("text")
     @classmethod
     def word_limit(cls, v):

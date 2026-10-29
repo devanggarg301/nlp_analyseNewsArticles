@@ -1,5 +1,14 @@
 # Verification record
 
+## Publication date recovery
+- Full regression suite: 102 passing tests. Date tests cover explicit publication
+  labels, Article JSON-LD, meta/time tags, invalid calendar dates, DOCX/TXT previews,
+  manual date precedence and recovery in saved workspace responses.
+- Updated timestamps, event dates and document creation dates are not used as
+  publication dates. Missing dates remain unavailable.
+- Recovered the saved NDTV article's explicit Published On date as 28 October 2026
+  in the running website without clearing its analysis or chat.
+
 ## Numerical claim update
 - Full regression suite: 76 passing tests. Targeted checks cover the exact five-versus-three
   example, numeric/word forms, compatible lower bounds, different times/locations,
